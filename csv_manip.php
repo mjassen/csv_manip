@@ -20,6 +20,40 @@ I,II,III
 
 
 
+/*
+if(isset($_POST['Submit'])){ //write the posted-back values into the csv file.
+    echo("Hello, we submitted your form!");
+	
+	$the_last_row = intval(substr($_POST['the_last_row_and_column'], 0, 12));
+	$the_last_column = intval(substr($_POST['the_last_row_and_column'], -12));
+	
+	
+	//make array that will be the new csv file.
+	$mj_csv_array = array();
+	
+	
+	//loop, inserting each post variable into its spot in the array.
+for ($counter=0; $counter<=$the_last_column; $counter++) {
+	
+	for ($rowcounter=0; $rowcounter<=$the_last_row; $rowcounter++) {
+	
+	
+	
+$mj_csv_array[$rowcounter][$counter] = 0;
+}
+	
+}
+
+
+	//save (write) the array to the .csv file.
+	var_dump($mj_csv_array);
+	
+};
+*/
+
+
+
+
 
 if(isset($_POST['Submit'])){ //write the posted-back values into the csv file.
     echo("Hello, we submitted your form!");
@@ -27,11 +61,37 @@ if(isset($_POST['Submit'])){ //write the posted-back values into the csv file.
 	//make array that will be the new csv file.
 	$mj_csv_array = array();
 	
+	$the_last_row = intval(substr($_POST['the_last_row_and_column'], 0, 12));
+	$the_last_column = intval(substr($_POST['the_last_row_and_column'], -12));
+	
+	echo 'the_last_row_and_column: ' . $_POST['the_last_row_and_column'] ;
+	echo 'the_last_row: ' . $the_last_row ;
+	echo 'the_last_column: ' . $the_last_column ;
+	
+	
 	
 	//loop, inserting each post variable into its spot in the array.
-	//save (write) the array to the .csv file.
+	for ($rowcounter=0; $rowcounter<=$the_last_row; $rowcounter++) {
+	for ($columncounter=0; $columncounter<=$the_last_column; $columncounter++) {
+
+	echo 'rowcounter + columncounter: ' . $rowcounter . '+' . $columncounter;
+	$mj_csv_array[$rowcounter][$columncounter] = 0;
+
+	
+}
+	}
+	
 	
 };
+
+var_dump($mj_csv_array);
+
+
+
+
+
+
+
 
 
 
@@ -78,6 +138,7 @@ $mj_csv_array[] = $mj_csv_row;
 }
 
 echo '</table>';
+echo '<input type="hidden" name="the_last_row_and_column" id="the_last_row_and_column" value="' .$the_last_row_and_column . '" /><br />';
 echo '<input type="submit" value="Submit" name="Submit">';
 echo '</form>';
 
