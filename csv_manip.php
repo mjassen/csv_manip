@@ -5,9 +5,10 @@
 //http://php.net/manual/en/function.fgetcsv.php
 
 
-// - if form was posted back, then write form data into the CSV file.
+// - if post back, save posted values to csv
 // - load the data from the CSV file and display it on to the screen as a form.
 // - upon "Submit" button click, post the form data back to itself.
+
 
 
 //contents of sample "in.csv" file:
@@ -23,7 +24,25 @@ I,II,III
 if(isset($_POST['Submit'])){ //write the posted-back values into the csv file.
     echo("Hello, we submitted your form!");
 	
-}else{//read from the csv file and print it to the browser window
+	//make array that will be the new csv file.
+	$mj_csv_array = array();
+	
+	
+	//loop, inserting each post variable into its spot in the array.
+	//save (write) the array to the .csv file.
+	
+};
+
+
+
+
+
+
+
+
+
+
+//read from the csv file and print it to the browser window
 
 $mj_csv_file_handle = fopen('in.csv','r');
 $row = 0;
@@ -68,16 +87,6 @@ var_dump($_POST);
 
 fclose($mj_csv_file_handle);
 	
-	
-	
-};
-
-
-
-
-
-
-
 
 
 
