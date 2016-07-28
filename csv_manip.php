@@ -5,96 +5,64 @@
 //http://php.net/manual/en/function.fgetcsv.php
 
 
-// - if post back, save posted values to csv
-// - load the data from the CSV file and display it on to the screen as a form.
-// - upon "Submit" button click, post the form data back to itself.
-
-
 
 //contents of sample "in.csv" file:
 /*
-1,2,3
-a,b,c
-I,II,III
-*/
+2016-06-20,"Hello world june 20 2016."
+2016-07-25,"Hello world july 25 2016."
 
-
-
-/*
-if(isset($_POST['Submit'])){ //write the posted-back values into the csv file.
-    echo("Hello, we submitted your form!");
-	
-	$the_last_row = intval(substr($_POST['the_last_row_and_column'], 0, 12));
-	$the_last_column = intval(substr($_POST['the_last_row_and_column'], -12));
-	
-	
-	//make array that will be the new csv file.
-	$mj_csv_array = array();
-	
-	
-	//loop, inserting each post variable into its spot in the array.
-for ($counter=0; $counter<=$the_last_column; $counter++) {
-	
-	for ($rowcounter=0; $rowcounter<=$the_last_row; $rowcounter++) {
-	
-	
-	
-$mj_csv_array[$rowcounter][$counter] = 0;
-}
-	
-}
-
-
-	//save (write) the array to the .csv file.
-	var_dump($mj_csv_array);
-	
-};
 */
 
 
 
 
 
-if(isset($_POST['Submit'])){ //write the posted-back values into the csv file.
-    echo("Hello, we submitted your form!");
-	
+
+if(isset($_POST['Submit'])){ //write the posted-back values into an array and then write the array into the csv file.
+
 	//make array that will be the new csv file.
 	$mj_csv_array = array();
-	
+
 	$the_last_row = intval(substr($_POST['the_last_row_and_column'], 0, 12));
 	$the_last_column = intval(substr($_POST['the_last_row_and_column'], -12));
-	
-	echo 'the_last_row_and_column: ' . $_POST['the_last_row_and_column'] ;
-	echo 'the_last_row: ' . $the_last_row ;
-	echo 'the_last_column: ' . $the_last_column ;
-	
-	
-	
-	//loop, inserting each post variable into its spot in the array.
-	for ($rowcounter=0; $rowcounter<=$the_last_row; $rowcounter++) {
-	for ($columncounter=0; $columncounter<=$the_last_column; $columncounter++) {
 
-	echo 'rowcounter + columncounter: ' . $rowcounter . '+' . $columncounter;
-	$mj_csv_array[$rowcounter][$columncounter] = 0;
+	$i = 0;
 
-	
-}
+	while ($i <= $the_last_row) {
+
+		$i++;
+
+		$j = 0;
+		while ($j <= $the_last_column){
+
+			$mj_temp = str_pad(($i -1), 12, "0", STR_PAD_LEFT) . str_pad($j, 12, "0", STR_PAD_LEFT);
+
+			$mj_csv_array[($i - 1)][$j] = $_POST[$mj_temp];
+
+			$j++;
+		}
+
+
 	}
-	
-	
+
+
+
+	//now open the csv file for writing, and write the array.
+	$mj_csv_file_handle = fopen('in.csv','w');
+
+
+
+	foreach ($mj_csv_array as $mj_csv_row){
+
+		fputcsv($mj_csv_file_handle, $mj_csv_row);
+
+	}
+
+	fclose($mj_csv_file_handle);
+
+
+
 };
-
-var_dump($mj_csv_array);
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -120,21 +88,21 @@ while ($mj_csv_row = fgetcsv($mj_csv_file_handle)){
 $mj_csv_array[] = $mj_csv_row;
 
         $num = count($mj_csv_row);
-        
+
 	echo '<tr style="border-width:2px;border-style:solid;;width:100%">';
 
-        
+
         for ($c=0; $c < $num; $c++) {
             echo '<td style="border-width:2px;border-style:solid;"><input type="text" name="' . str_pad($row, 12, "0", STR_PAD_LEFT) . str_pad($c, 12, "0", STR_PAD_LEFT) . '" value="' . $mj_csv_row[$c] . '"></td>';
             //<input type="text" name="text1" value="">
 			//str_pad($input, 10, "-=", STR_PAD_LEFT);
 			$the_last_row_and_column = str_pad($row, 12, "0", STR_PAD_LEFT) . str_pad($c, 12, "0", STR_PAD_LEFT);
         }
-        
+
 	echo '</tr>';
 
         $row++;
-	
+
 }
 
 echo '</table>';
@@ -142,12 +110,7 @@ echo '<input type="hidden" name="the_last_row_and_column" id="the_last_row_and_c
 echo '<input type="submit" value="Submit" name="Submit">';
 echo '</form>';
 
-echo 'the last row and column was: ' . $the_last_row_and_column;
-
-var_dump($_POST);
-
 fclose($mj_csv_file_handle);
-	
 
 
 
@@ -155,39 +118,4 @@ fclose($mj_csv_file_handle);
 
 
 
-
-
-
-
-
-/*
-//replace one cell in the array with a "0"
-$mj_csv_array[1][0] = 0;
-
-
-
-//now open the csv file for writing, and write the array including the change(s).
-$mj_csv_file_handle = fopen('in.csv','w');
-
-
-
-foreach ($mj_csv_array as $mj_csv_row){
-
-	fputcsv($mj_csv_file_handle, $mj_csv_row);  
-
-}
-
-fclose($mj_csv_file_handle);
-*/
-
-?>
-<?php
-/*
-<form action="">
-  <input type="text" name="text1" value=""><br>
-  Last name:<br>
-  <input type="text" name="lastname" value="Mouse"><br><br>
-  <input type="submit" value="Submit">
-</form>
-*/
 ?>
